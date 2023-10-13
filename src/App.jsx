@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={styles.container}>
+      <h1 style={styles.heading}>Website Coming Soon</h1>
+      <div style={styles.card}>
+        <p style={styles.subText}>I am working on something awesome. Stay tuned!</p>
+        <p style= {styles.subText}>- Zikri 👊</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    background: '#f2f2f2',
+  },
+  heading: {
+    fontSize: '3rem',
+    marginBottom: '2rem',
+    color: '#333',
+    textTransform: 'uppercase',
+  },
+  card: {
+    padding: '2rem',
+    border: '2px solid #ddd',
+    borderRadius: '12px',
+    background: 'linear-gradient(to right, #00bfff, #1e90ff)',
+    maxWidth: '80%',
+    width: '400px',
+    textAlign: 'center',
+  },
+  subText: {
+    fontSize: '1.5rem',
+    margin: '2rem 0',
+    color: '#fff',
+  },
+};

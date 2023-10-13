@@ -2,7 +2,6 @@ const Schedule = () => {
     return (
         <>
             <title>Jadwal Rutin - Semester 7</title>
-            <link rel="shortcut icon" type="image/jpg" href="https://img.icons8.com/cute-clipart/64/000000/edit.png"/>
             <style>
                 {`
                     body {

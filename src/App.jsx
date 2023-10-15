@@ -19,7 +19,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
-    background: '#f2f2f2',
+    background: '#fff',
   },
   heading: {
     fontSize: '3rem',

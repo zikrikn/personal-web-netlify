@@ -3,11 +3,12 @@ import { parseStringPromise } from 'xml2js';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
+  const [displayedArticles, setDisplayedArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const mediumFeedUrl = "https://zikri.medium.com/feed";
-    const linkedInFeedUrl = "https://www.bing.com/search?q=site%3Alinkedin.com%2Fpulse%2F+%22zikri+kholifah+nur%22+intitle%3A%22zikri+kholifah+nur%22&format=rss";
+    const mediumFeedUrl = "/medium";
+    const linkedInFeedUrl = "/linkedin";
 
     const fetchFeeds = async () => {
       try {
@@ -20,12 +21,17 @@ const App = () => {
         const [feed1, feed2] = await Promise.all([parseStringPromise(text1), parseStringPromise(text2)]);
 
         const parseEntries = (feed, source) => {
-          return feed.rss.channel[0].item.map(entry => ({
-            title: entry.title[0],
-            link: entry.link[0],
-            published: new Date(entry.pubDate[0]),
-            source,
-          }));
+          return feed.rss.channel[0].item.map(entry => {
+            // Remove '- LinkedIn' from title if present
+            let title = entry.title[0].replace(/ - LinkedIn$/, '');
+
+            return {
+              title: title,
+              link: entry.link[0],
+              published: new Date(entry.pubDate[0]),
+              source,
+            };
+          });
         };
 
         const entries = [
@@ -35,6 +41,7 @@ const App = () => {
 
         const sortedEntries = entries.sort((a, b) => b.published - a.published);
         setArticles(sortedEntries);
+        setDisplayedArticles(sortedEntries.slice(0, 5));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching RSS feeds:", error);
@@ -43,7 +50,11 @@ const App = () => {
     };
 
     fetchFeeds();
-  }, []);
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+
+  const handleLoadMore = () => {
+    setDisplayedArticles(articles); // Adjusted to load all articles
+  };
 
   return (
     <div style={styles.container}>
@@ -52,30 +63,44 @@ const App = () => {
         <p style={styles.subText}>I am working on something awesome. Stay tuned!</p>
         <p style={styles.subText}>- Zikri 👊</p>
         <p style={styles.subText}>
-          GitHub: {' '}
+          GitHub:{' '}
           <a href="https://github.com/zikrikn" target="_blank" rel="noopener noreferrer" style={styles.link}>
             https://github.com/zikrikn
           </a>
         </p>
       </div>
-      <div style={styles.card}>
+
+      <div style={styles.articlesContainer}>
         <h2 style={styles.subHeading}>While waiting, check out these articles:</h2>
         {loading ? (
           <p style={styles.loadingText}>Loading articles...</p>
         ) : (
-          articles.map((article, index) => (
+          displayedArticles.map((article, index) => (
             <div key={index} style={styles.article}>
+              <div style={styles.articleMeta}>
+                <span style={styles.articleDate}>{article.published.toLocaleDateString()}</span>
+                <span style={{ ...styles.label, ...styles[article.source.toLowerCase()] }}>{article.source}</span>
+              </div>
               <a href={article.link} target="_blank" rel="noopener noreferrer" style={styles.articleLink}>
                 {article.title}
               </a>
-              <p style={styles.articleDate}>{article.published.toLocaleDateString()}</p>
-              <span style={{ ...styles.label, ...styles[article.source.toLowerCase()] }}>
-                {article.source}
-              </span>
+              {index !== displayedArticles.length - 1 && <hr style={styles.divider} />}
             </div>
           ))
         )}
+        {displayedArticles.length < articles.length && (
+          <div style={styles.center}>
+            <button style={styles.readMoreButton} onClick={handleLoadMore}>
+              Read More
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Footer Section */}
+      <footer style={styles.footer}>
+        <p style={styles.footerText}>&copy; {new Date().getFullYear()} Zikri Kholifah Nur. All rights reserved.</p>
+      </footer>
     </div>
   );
 };
@@ -84,11 +109,11 @@ export default App;
 
 const styles = {
   container: {
+    fontFamily: 'Poppins, sans-serif',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
+    minHeight: '100vh',
     background: '#f9f9f9',
     border: '1px solid #ddd',
     borderRadius: '12px',
@@ -98,13 +123,17 @@ const styles = {
     fontSize: '2.5rem',
     marginBottom: '2rem',
     color: '#333',
+    fontFamily: 'Poppins, sans-serif',
   },
   subHeading: {
     fontSize: '1.2rem',
     marginBottom: '1rem',
     color: '#333',
+    textAlign: 'center', // Center align text
+    fontFamily: 'Poppins, sans-serif',
   },
   card: {
+    fontFamily: 'Poppins, sans-serif',
     padding: '1.5rem',
     border: '1px solid #ddd',
     borderRadius: '8px',
@@ -118,40 +147,110 @@ const styles = {
     fontSize: '1.2rem',
     margin: '1.5rem 0',
     color: '#333',
+    fontFamily: 'Poppins, sans-serif',
   },
   link: {
-    color: '#0077b5', // LinkedIn blue color
+    color: '#0077b5',
     textDecoration: 'none',
+    fontFamily: 'Poppins, sans-serif',
   },
   loadingText: {
     fontSize: '1rem',
     color: '#333',
+    fontFamily: 'Poppins, sans-serif',
+    textAlign: 'center',
   },
   article: {
     marginBottom: '1rem',
-    textAlign: 'left',
+    width: '70%',
+    margin: '0 auto',
+  },
+  articleMeta: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: '0.5rem',
   },
   articleLink: {
     fontSize: '1rem',
-    color: '#0077b5', // LinkedIn blue color
+    color: '#0077b5',
     textDecoration: 'none',
+    display: 'block',
+    marginBottom: '0.5rem',
+    fontFamily: 'Poppins, sans-serif',
   },
   articleDate: {
     fontSize: '0.9rem',
     color: '#777',
+    marginRight: '0.5rem',
+    fontFamily: 'Poppins, sans-serif',
   },
   label: {
-    display: 'inline-block',
     padding: '0.2rem 0.5rem',
     borderRadius: '4px',
     fontSize: '0.9rem',
     color: '#fff',
-    marginLeft: '0.5rem',
+    textTransform: 'uppercase',
+    marginLeft: 'auto',
+    fontFamily: 'Poppins, sans-serif',
   },
   linkedin: {
     backgroundColor: '#0077b5',
+    fontFamily: 'Poppins, sans-serif',
   },
   medium: {
     backgroundColor: '#00ab6c',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  articlesContainer: {
+    width: '100%',
+    marginTop: '1rem',
+    fontFamily: 'Poppins, sans-serif',
+    padding: '0 10px', // Penambahan padding untuk responsivitas pada layar kecil
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '1rem',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  readMoreButton: {
+    padding: '0.5rem 1rem',
+    background: '#0077b5',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  divider: {
+    width: '100%',
+    border: 'none',
+    borderTop: '1px solid #ddd',
+    margin: '0.5rem 0',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  footer: {
+    marginTop: '1.5rem',
+    textAlign: 'center',
+    fontFamily: 'Poppins, sans-serif',
+  },
+  footerText: {
+    fontSize: '0.8rem',
+    color: '#777',
+    fontFamily: 'Poppins, sans-serif',
+  },
+
+  // Media query for mobile
+  '@media (max-width: 768px)': {
+    articlesContainer: {
+      padding: '0 5px', // Adjust padding for smaller screens
+    },
+    article: {
+      width: '90%', // Adjust width of articles for smaller screens
+    },
+    card: {
+      width: '90%', // Adjust width of cards for smaller screens
+    },
   },
 };
+

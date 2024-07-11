@@ -1,1 +1,5 @@
 /* /index.html 200
+
+# _redirects file
+/medium/*  https://zikri.medium.com/feed/:splat  200
+/linkedin/* https://www.bing.com/search?q=site%3Alinkedin.com%2Fpulse%2F+%22zikri+kholifah+nur%22+intitle%3A%22zikri+kholifah+nur%22&format=rss  200

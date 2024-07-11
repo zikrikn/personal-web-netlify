@@ -12,7 +12,9 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "rss-parser": "^3.13.0",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

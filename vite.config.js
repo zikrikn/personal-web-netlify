@@ -6,15 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/medium': {
-        target: 'https://zikri.medium.com/feed', // Full URL with protocol and path
+      '/.netlify/functions': {
+        target: 'https://zikri.dev', // Ganti dengan URL situs Netlify kamu
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/medium/, ''),
-      },
-      '/linkedin': {
-        target: 'https://www.bing.com/search?q=site%3Alinkedin.com%2Fpulse%2F+%22zikri+kholifah+nur%22+intitle%3A%22zikri+kholifah+nur%22&format=rss', // Full URL
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/linkedin/, ''), 
+        rewrite: (path) => path.replace(/^\/\.netlify\/functions/, ''),
       },
     },
   },

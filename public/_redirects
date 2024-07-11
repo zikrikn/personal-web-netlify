@@ -1,7 +1,6 @@
-# _redirects file
+# Proxy untuk Medium dan LinkedIn (Bing RSS)
+/medium    /.netlify/functions/proxy
+/linkedin  /.netlify/functions/proxy
 
-/medium  https://zikri.medium.com/feed/ 200
-/linkedin https://www.bing.com/search?q=site%3Alinkedin.com%2Fpulse%2F+%22zikri+kholifah+nur%22+intitle%3A%22zikri+kholifah+nur%22&format=rss  200
-
-/* /index.html 200
-
+# Fallback untuk SPA (misalnya React)
+/*  /index.html  200

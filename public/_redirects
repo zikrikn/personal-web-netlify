@@ -1,6 +1,4 @@
-# Proxy untuk Medium dan LinkedIn (Bing RSS)
-/medium    /functions/proxy
-/linkedin  /functions/proxy
+/medium    /netlify/functions/proxy
+/linkedin  /netlify/functions/proxy
 
-# Fallback untuk SPA (misalnya React)
 /*  /index.html  200

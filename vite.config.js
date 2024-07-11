@@ -1,16 +1,20 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/.netlify/functions': {
-        target: 'https://zikri.dev', // Ganti dengan URL situs Netlify kamu
+      '/medium': {
+        target: 'http://localhost:8888/.netlify/functions/medium',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/\.netlify\/functions/, ''),
+        rewrite: (path) => path.replace(/^\/.netlify\/functions\/medium/, ''),
+      },
+      '/linkedin': {
+        target: 'http://localhost:8888/.netlify/functions/linkedin',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/.netlify\/functions\/linkedin/, ''),
       },
     },
   },
-})
+});

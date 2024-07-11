@@ -1,4 +1,4 @@
-/medium    /.netlify/functions/proxy
-/linkedin  /.netlify/functions/proxy
+/medium    /.netlify/functions/medium
+/linkedin  /.netlify/functions/linkedin
 
 /*  /index.html  200

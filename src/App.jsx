@@ -12,19 +12,20 @@ const App = () => {
 
     const fetchFeeds = async () => {
       try {
-        const [response1, response2] = await Promise.all([
-          fetch(mediumFeedUrl),
-          fetch(linkedInFeedUrl)
+        const responses = await Promise.all([
+          fetch(mediumFeedUrl).then(response => response.ok ? response.text() : null),
+          fetch(linkedInFeedUrl).then(response => response.ok ? response.text() : null)
         ]);
-        const [text1, text2] = await Promise.all([response1.text(), response2.text()]);
-
-        const [feed1, feed2] = await Promise.all([parseStringPromise(text1), parseStringPromise(text2)]);
-
+        
+        const validResponses = responses.filter(response => response !== null);
+        
+        const parsedFeeds = await Promise.all(validResponses.map(text => parseStringPromise(text)));
+        
         const parseEntries = (feed, source) => {
           return feed.rss.channel[0].item.map(entry => {
             // Remove '- LinkedIn' from title if present
             let title = entry.title[0].replace(/ - LinkedIn$/, '');
-
+    
             return {
               title: title,
               link: entry.link[0],
@@ -33,12 +34,17 @@ const App = () => {
             };
           });
         };
-
-        const entries = [
-          ...parseEntries(feed1, 'Medium'),
-          ...parseEntries(feed2, 'LinkedIn'),
-        ];
-
+        
+        const entries = parsedFeeds.flatMap((feed, index) => {
+          if (!feed || !feed.rss || !feed.rss.channel || !feed.rss.channel[0].item) {
+            return [];
+          }
+          
+          const source = index === 0 ? 'Medium' : 'LinkedIn';
+          
+          return parseEntries(feed, source);
+        });
+        
         const sortedEntries = entries.sort((a, b) => b.published - a.published);
         setArticles(sortedEntries);
         setDisplayedArticles(sortedEntries.slice(0, 5));
@@ -50,7 +56,7 @@ const App = () => {
     };
 
     fetchFeeds();
-  }, []); // Empty dependency array ensures this effect runs only once on mount
+  }, []);
 
   const handleLoadMore = () => {
     setDisplayedArticles(articles); // Adjusted to load all articles
@@ -253,4 +259,3 @@ const styles = {
     },
   },
 };
-

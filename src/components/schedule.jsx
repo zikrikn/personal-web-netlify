@@ -1,7 +1,7 @@
 const Schedule = () => {
     return (
         <>
-            <title>Jadwal Rutin - Semester 7</title>
+            <title>Jadwal Punya Zikri</title>
             <style>
                 {`
                     body {

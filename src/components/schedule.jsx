@@ -45,7 +45,7 @@ const Schedule = () => {
                 </a>
             </div>
             <div className="iframe-container">
-               <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FJakarta&bgcolor=%23ffffff&title=Zikri's%20Schedule&mode=WEEK&showNav=0&showTabs=0&showCalendars=0&src=emlrcmlraG9saWZhaDg5OEBnbWFpbC5jb20&color=%2333ae06"></iframe>
+               <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FJakarta&bgcolor=%23ffffff&title=Zikri's%20Schedule&mode=WEEK&showPrint=0&showNav=0&showTabs=0&showCalendars=0&src=emlrcmlraG9saWZhaDg5OEBnbWFpbC5jb20&color=%2333ae06"></iframe>
             </div>
         </>
     );
